@@ -1,82 +1,96 @@
-import { Component } from 'react';
-import { fetchImages } from 'api.js';
-import { nanoid } from 'nanoid';
-// import { ImageGallery } from '/Users/ekaterinakohas/Documents/GitHub/goit-react-hw-03-image-finder/src/components/Gallery/ImageGallery/ImageGallery.jsx';
+import React, { Component } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { fetchImages } from 'api';
+import { Gallery } from './Gallery/ImageGallery/ImageGallery';
+import { Pagination } from './Gallery/LoadMore/LoadMore';
+import { Wrapper } from './App.styled';
+import { Loader } from './Gallery/Loader/Loader';
+import {
+  notifyInfo,
+  notifyInputQuerry,
+  success,
+} from './Gallery/Notify/Notify';
+import { Searchbar } from './Gallery/SearchBar/SearchBar';
 
 export class ImageApp extends Component {
   state = {
     query: '',
     images: [],
     page: 1,
+    loading: false,
   };
-  async componentDidMount() {
-    const images = await fetchImages();
-    this.setState({ images });
-  }
 
   changeQuery = newQuery => {
-    this.setState(
-      {
-        query: `${nanoid()}/${newQuery}`,
-        images: [],
-        page: 1,
-      },
-      () => this.fetchImages()
-    );
+    this.setState({
+      query: `${Date.now()}/${newQuery}`,
+      images: [],
+      page: 1,
+    });
   };
-  // setImages = () => {}; (не нужен, потому что используется в DidUpdate)
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.query !== this.state.query ||
-      prevState.page !== this.state.page
-    ) {
-      const { query, page } = this.state;
-      const searchQuery = query.split('/').pop();
-      fetchImages(searchQuery, page).then(images => {
-        this.setState({ images });
-      });
-      // HTTP запрос за query - не забываем отрезать request-id/ от query
-      // this.setState (images: результат запроса)
+  componentDidUpdate = async (prevProps, prevState) => {
+    const prevQuery = prevState.query;
+    const searchQuery = this.state.query;
+    const prevPage = prevState.page;
+    const nexPage = this.state.page;
+
+    if (prevQuery !== searchQuery || prevPage !== nexPage) {
+      this.loadResult();
     }
+  };
 
-    // handleLoadMore = () => {
-    //   this.setState(prevState => ({ page: prevState.page + 1 }));
-    // };
-  }
+  loadResult = async () => {
+    const searchQuery = this.state.query;
+    const nexPage = this.state.page;
+
+    try {
+      this.setState({ loading: true });
+      const img = await fetchImages(searchQuery, nexPage);
+      if (img.length) {
+        this.setState(prevState => ({
+          images: this.state.page > 1 ? [...prevState.images, ...img] : img,
+        }));
+        success(searchQuery);
+        this.setState({ loading: false });
+      } else {
+        notifyInfo();
+        this.setState({ loading: false });
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({ loading: false });
+    }
+  };
+
+  handleSubmit = evt => {
+    evt.preventDefault();
+    if (evt.target.elements.query.value.trim() === '') {
+      notifyInputQuerry();
+      return;
+    }
+    this.changeQuery(evt.target.elements.query.value);
+
+    evt.target.reset();
+  };
+
+  handleLoadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
+
   render() {
-    const { query } = this.state;
+    const { loading, images } = this.state;
     return (
-      <div>
-        <div>
-          <form
-            onSubmit={evt => {
-              evt.preventDefault();
-              const newQuery = evt.target.elements.query.value.trim();
-              if (newQuery === '') {
-                alert('Oops! Search query is empty!');
-              } else {
-                this.changeQuery(newQuery);
-                evt.target.reset();
-              }
-            }}
-          >
-            <input
-              type="text"
-              value={query}
-              onChange={evt => {
-                // Обробник подій onChange, який оновлює стан query
-                this.setState({ query: evt.target.value });
-              }}
-            />
-            <button type="submit">Search</button>
-          </form>
-        </div>
-        <div>{/* <ImageGallery /> */}</div>
-        <div>
-          <button>Load more</button>
-        </div>
-      </div>
+      <Wrapper>
+        <Searchbar onSubmit={this.handleSubmit} />
+        {loading && <Loader />}
+        {images.length > 0 && <Gallery imgItems={images} />}
+        {images.length > 0 && (
+          <Pagination onClick={this.handleLoadMore}>Load More</Pagination>
+        )}
+        <Toaster position="top-right" reverseOrder={true} />
+      </Wrapper>
     );
   }
 }

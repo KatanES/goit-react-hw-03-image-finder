@@ -1,17 +1,16 @@
-import { ImageItem } from '/Users/ekaterinakohas/Documents/GitHub/goit-react-hw-03-image-finder/src/components/Gallery/ImageGallery/ImageItem.jsx';
-import { nanoid } from 'nanoid';
+import { GalleryImage } from '../ImageGalleryItem/ImageGalleryItem';
+import { ImageGallery, ImageGalleryItem } from './ImageGallery.styled.';
 
-export const ImageGallery = ({ images }) => {
-  if (!images || images.length === 0) {
-    return <div>Немає зображень для відображення</div>;
-  }
+export const Gallery = ({ imgItems }) => {
   return (
-    <ul>
-      {images.map(image => (
-        <li key={nanoid()}>
-          <ImageItem image={image} />
-        </li>
-      ))}
-    </ul>
+    <div>
+      <ImageGallery>
+        {imgItems.map(item => (
+          <ImageGalleryItem key={item.id}>
+            <GalleryImage item={item} />
+          </ImageGalleryItem>
+        ))}
+      </ImageGallery>
+    </div>
   );
 };

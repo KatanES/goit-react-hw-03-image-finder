@@ -1,21 +1,29 @@
+// import axios from 'axios';
+// axios.defaults.baseURL = 'https://pixabay.com/api/';
+// const API_KEY = '38005308-94b85d06f84497fefd0aa075c';
+
 import axios from 'axios';
-axios.defaults.baseURL = 'https://pixabay.com/api/';
-const API_KEY = '38005308-94b85d06f84497fefd0aa075c';
+
+const API_KEY = '20403084-138caa44d9b5066c1dd91e458';
+axios.defaults.baseURL = `https://pixabay.com/api/`;
 
 export const fetchImages = async (query, page) => {
+  const separated = query.split('/');
+  const exstractedQuery = separated[1];
   try {
-    const response = await axios.get('/', {
+    const response = await axios.get('', {
       params: {
         key: API_KEY,
-        q: query,
+        q: exstractedQuery,
         image_type: 'photo',
         orientation: 'horizontal',
+        page: page,
         per_page: 12,
-        page: 1,
       },
     });
-    return response.data;
+    return response.data.hits;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 };
