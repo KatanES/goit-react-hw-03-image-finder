@@ -15,16 +15,6 @@ export const fetchImages = async (query, page) => {
       },
     });
     return response.data;
-
-    const newImages = response.data.hits;
-
-    if (page === 1) {
-      this.setState({ images: newImages });
-    } else {
-      this.setState(prevState => ({
-        images: [...prevState.images, ...newImages],
-      }));
-    }
   } catch (error) {
     throw error;
   }

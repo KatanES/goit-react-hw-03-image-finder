@@ -45,7 +45,7 @@ export class ImageApp extends Component {
     // };
   }
   render() {
-    const { query, images } = this.state;
+    const { query } = this.state;
     return (
       <div>
         <div>
@@ -63,7 +63,7 @@ export class ImageApp extends Component {
           >
             <input
               type="text"
-              value={this.state.query}
+              value={query}
               onChange={evt => {
                 // Обробник подій onChange, який оновлює стан query
                 this.setState({ query: evt.target.value });
@@ -72,9 +72,7 @@ export class ImageApp extends Component {
             <button type="submit">Search</button>
           </form>
         </div>
-        <div>
-          <ImageGallery />
-        </div>
+        <div>{/* <ImageGallery /> */}</div>
         <div>
           <button>Load more</button>
         </div>
