@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { fetchImages } from 'api.js';
 import { nanoid } from 'nanoid';
-import { ImageGallery } from '/Users/ekaterinakohas/Documents/GitHub/goit-react-hw-03-image-finder/src/components/Gallery/ImageGallery/ImageGallery.jsx';
+// import { ImageGallery } from '/Users/ekaterinakohas/Documents/GitHub/goit-react-hw-03-image-finder/src/components/Gallery/ImageGallery/ImageGallery.jsx';
 
 export class ImageApp extends Component {
   state = {
