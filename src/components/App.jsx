@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { fetchImages } from 'api.js';
 import { nanoid } from 'nanoid';
-import { ImageGallery } from '/Users/ekaterinakohas/Documents/GitHub/goit-react-hw-03-image-finder/src/components/Gallery/ImageGallery/ImageGallery.jsx';
+// import { ImageGallery } from '/Users/ekaterinakohas/Documents/GitHub/goit-react-hw-03-image-finder/src/components/Gallery/ImageGallery/ImageGallery.jsx';
 
 export class ImageApp extends Component {
   state = {
@@ -67,9 +67,7 @@ export class ImageApp extends Component {
             <button type="submit">Search</button>
           </form>
         </div>
-        <div>
-          <ImageGallery />
-        </div>
+        <div>{/* <ImageGallery /> */}</div>
         <div>
           <button>Load more</button>
         </div>
