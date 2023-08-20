@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { fetchImages } from 'api.js';
 import { nanoid } from 'nanoid';
-// import { ImageGallery } from '/Users/ekaterinakohas/Documents/GitHub/goit-react-hw-03-image-finder/src/components/Gallery/ImageGallery/ImageGallery.jsx';
+import { ImageGallery } from '/Users/ekaterinakohas/Documents/GitHub/goit-react-hw-03-image-finder/src/components/Gallery/ImageGallery/ImageGallery.jsx';
 
 export class ImageApp extends Component {
   state = {
@@ -15,11 +15,14 @@ export class ImageApp extends Component {
   }
 
   changeQuery = newQuery => {
-    this.setState({
-      query: `${nanoid()}/${newQuery}`,
-      images: [],
-      page: 1,
-    });
+    this.setState(
+      {
+        query: `${nanoid()}/${newQuery}`,
+        images: [],
+        page: 1,
+      },
+      () => this.fetchImages()
+    );
   };
   // setImages = () => {}; (не нужен, потому что используется в DidUpdate)
 
@@ -42,6 +45,7 @@ export class ImageApp extends Component {
     // };
   }
   render() {
+    const { query, images } = this.state;
     return (
       <div>
         <div>
@@ -51,9 +55,10 @@ export class ImageApp extends Component {
               const newQuery = evt.target.elements.query.value.trim();
               if (newQuery === '') {
                 alert('Oops! Search query is empty!');
+              } else {
+                this.changeQuery(newQuery);
+                evt.target.reset();
               }
-              this.changeQuery(newQuery);
-              evt.target.reset();
             }}
           >
             <input
@@ -67,7 +72,9 @@ export class ImageApp extends Component {
             <button type="submit">Search</button>
           </form>
         </div>
-        <div>{/* <ImageGallery /> */}</div>
+        <div>
+          <ImageGallery />
+        </div>
         <div>
           <button>Load more</button>
         </div>

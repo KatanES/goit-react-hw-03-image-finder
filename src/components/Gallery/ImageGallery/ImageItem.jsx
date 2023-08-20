@@ -1,10 +1,11 @@
-export const ImageItem = ({
-  image: { webformatURL, id, largeImageURL, tags },
-}) => {
+export const ImageItem = ({ image }) => {
+  const { webformatURL, id, largeImageURL, tags } = image;
+
   return (
     <div>
-      <a href={webformatURL}></a>
-      <img src={largeImageURL} alt={tags} width="100" />
+      <a href={largeImageURL} target="_blank" rel="noopener noreferrer">
+        <img src={webformatURL} alt={tags} width="100" />
+      </a>
     </div>
   );
 };
