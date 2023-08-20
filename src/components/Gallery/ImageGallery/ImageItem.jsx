@@ -1,5 +1,5 @@
 export const ImageItem = ({ image }) => {
-  const { webformatURL, id, largeImageURL, tags } = image;
+  const { webformatURL, largeImageURL, tags } = image;
 
   return (
     <div>
